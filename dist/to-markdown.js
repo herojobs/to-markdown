@@ -91,12 +91,23 @@ function createHtmlParser() {
   return Parser;
 }
 
-var HtmlParser = canParseHtml() ? _window.DOMParser : createHtmlParser();
+var HtmlParserDom = _window.DOMParser;
+var HtmlParserCreate = createHtmlParser();
+var HtmlParser = canParseHtml() ? HtmlParserDom : HtmlParserCreate;
 
-function htmlToDom(string) {
-  var tree = new HtmlParser().parseFromString(string, 'text/html');
-  collapse(tree, isBlock);
-  return tree;
+function htmlToDom(string, forceCreateParser) {
+    var tree = null;
+    if(forceCreateParser){
+        tree = new HtmlParserCreate().parseFromString(string, 'text/html');
+    }
+    else {
+      newDoc.body.innerHTML = string;
+    else{
+        tree = new HtmlParser().parseFromString(string, 'text/html');
+    }
+    return newDoc;
+  };
+  return Parser;
 }
 
 /*
@@ -250,7 +261,7 @@ toMarkdown = function (input, options) {
   // Escape potential ol triggers
   input = input.replace(/(\d+)\. /g, '$1\\. ');
 
-  var clone = htmlToDom(input).body,
+  var clone = htmlToDom(input, options.forceCreateParser).body,
       nodes = bfsOrder(clone),
       output;
 
