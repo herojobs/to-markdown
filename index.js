@@ -94,19 +94,16 @@ var HtmlParserDom = _window.DOMParser;
 var HtmlParserCreate = createHtmlParser();
 var HtmlParser = canParseHtml() ? HtmlParserDom : HtmlParserCreate;
 
-function htmlToDom(string, forceCreateParser) {
-    var tree = null;
-    if(forceCreateParser){
-        tree = new HtmlParserCreate().parseFromString(string, 'text/html');
-    }
-    else {
-      newDoc.body.innerHTML = string;
-    else{
-        tree = new HtmlParser().parseFromString(string, 'text/html');
-    }
-    return newDoc;
-  };
-  return Parser;
+function htmlToDom(string) {
+  var tree = null;
+  if(forceCreateParser){
+      tree = new HtmlParserCreate().parseFromString(string, 'text/html');
+  }
+  else{
+      tree = new HtmlParser().parseFromString(string, 'text/html');
+  }
+  collapse(tree, isBlock);
+  return tree;
 }
 
 /*
